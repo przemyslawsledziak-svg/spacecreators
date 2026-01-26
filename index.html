@@ -1,0 +1,1808 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space Creators - Projekt • Nadzór • Realizacja</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Raleway', sans-serif;
+    }
+    
+    h1, h2, h3, h4, .heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+    }
+    
+    :root {
+      --ivory: #FDFBF7;
+      --pearl: #F5F3EF;
+      --navy: #1E3A5F;
+      --steel: #4A6680;
+      --bronze: #8B7355;
+      --copper: #B87333;
+      --walnut: #5D4037;
+      --gold: #C9A962;
+      --sage: #7D8471;
+      --charcoal: #2D3436;
+      --graphite: #4A4A4A;
+      --silver: #9CA3AF;
+    }
+    
+    body {
+      background-color: var(--ivory);
+      color: var(--charcoal);
+      overflow-x: hidden;
+    }
+    
+    /* Animations */
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(1deg); }
+    }
+    
+    @keyframes morph {
+      0% { border-radius: 45% 55% 65% 35% / 50% 50% 50% 50%; }
+      25% { border-radius: 55% 45% 55% 45% / 45% 55% 45% 55%; }
+      50% { border-radius: 35% 65% 45% 55% / 55% 45% 55% 45%; }
+      75% { border-radius: 65% 35% 55% 45% / 45% 55% 45% 55%; }
+      100% { border-radius: 45% 55% 65% 35% / 50% 50% 50% 50%; }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.05); }
+    }
+    
+    @keyframes waveFlow {
+      0% { 
+        transform: translateX(100px) scale(1);
+        border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%;
+        opacity: 0;
+      }
+      15% {
+        opacity: 0.08;
+      }
+      30% { 
+        transform: translateX(50px) scale(1.1);
+        border-radius: 40% 60% 50% 50% / 60% 40% 60% 40%;
+        opacity: 0.1;
+      }
+      50% { 
+        transform: translateX(0px) scale(1.05);
+        border-radius: 50% 50% 40% 60% / 40% 50% 50% 60%;
+        opacity: 0.08;
+      }
+      70% { 
+        transform: translateX(-50px) scale(0.95);
+        border-radius: 70% 30% 60% 40% / 50% 70% 30% 50%;
+        opacity: 0.06;
+      }
+      85% {
+        opacity: 0.04;
+      }
+      100% { 
+        transform: translateX(-100px) scale(1);
+        border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%;
+        opacity: 0;
+      }
+    }
+    
+    .wave-shape {
+      animation: waveFlow 12s ease-in-out infinite;
+    }
+    
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    .animate-morph { animation: morph 8s ease-in-out infinite; }
+    .animate-pulse { animation: pulse 3s ease-in-out infinite; }
+    .animate-slide-up { animation: slideUp 0.8s ease-out forwards; }
+    
+    .card-hover {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-hover:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+    }
+    
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      padding: 1.25rem 1.5rem;
+      transition: all 0.5s;
+      background: transparent;
+    }
+    
+    .nav.scrolled {
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      padding: 0.75rem 1.5rem;
+    }
+    
+    .nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+    }
+    
+    .logo-shape {
+      position: relative;
+      width: 28px;
+      height: 28px;
+    }
+    
+    .logo-shape-outer {
+      position: absolute;
+      inset: 0;
+      border: 2px solid var(--charcoal);
+      animation: morph 8s ease-in-out infinite;
+    }
+    
+    .logo-shape-inner {
+      position: absolute;
+      inset: 5px;
+      border: 1px solid var(--bronze);
+      animation: morph 8s ease-in-out infinite;
+      animation-delay: -2s;
+    }
+    
+    .logo-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+    
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    
+    .nav-links a {
+      text-decoration: none;
+      color: var(--charcoal);
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.025em;
+      transition: opacity 0.3s;
+    }
+    
+    .nav-links a:hover {
+      opacity: 0.6;
+    }
+    
+    .nav-cta {
+      padding: 0.625rem 1.5rem;
+      background: var(--navy);
+      color: white !important;
+      border-radius: 50px;
+      transition: transform 0.3s !important;
+    }
+    
+    .nav-cta:hover {
+      transform: scale(1.05);
+      opacity: 1 !important;
+    }
+    
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 6rem 1.5rem 4rem;
+    }
+    
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    
+    .hero-shape {
+      position: absolute;
+      border-radius: 50%;
+    }
+    
+    .hero-shape-1 {
+      width: 400px;
+      height: 400px;
+      background: var(--navy);
+      top: 10%;
+      right: -5%;
+      animation: waveFlow 14s ease-in-out infinite;
+    }
+    
+    .hero-shape-2 {
+      width: 220px;
+      height: 220px;
+      background: var(--bronze);
+      opacity: 0.1;
+      bottom: 20%;
+      left: 5%;
+      animation: float 10s ease-in-out infinite reverse;
+    }
+    
+    .hero-shape-3 {
+      width: 160px;
+      height: 160px;
+      background: var(--gold);
+      opacity: 0.15;
+      top: 60%;
+      right: 20%;
+      animation: morph 8s ease-in-out infinite, pulse 4s ease-in-out infinite;
+    }
+    
+    .hero-content {
+      max-width: 1024px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+    
+    /* Logo Hero */
+    .hero-logo {
+      margin-bottom: 2.5rem;
+      animation: slideUp 0.8s ease-out;
+    }
+    
+    .hero-logo-shape {
+      position: relative;
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 1.5rem;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .hero-logo-outer {
+      position: absolute;
+      inset: 0;
+      border: 3px solid var(--charcoal);
+      animation: morph 8s ease-in-out infinite;
+    }
+    
+    .hero-logo-mid {
+      position: absolute;
+      inset: 12px;
+      border: 2px solid var(--bronze);
+      animation: morph 8s ease-in-out infinite;
+      animation-delay: -2s;
+    }
+    
+    .hero-logo-inner {
+      position: absolute;
+      inset: 24px;
+      border: 1px solid rgba(201, 169, 98, 0.5);
+      animation: morph 8s ease-in-out infinite;
+      animation-delay: -4s;
+    }
+    
+    .hero-title {
+      font-size: 3.5rem;
+      color: var(--charcoal);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+    
+    .hero-subtitle {
+      font-size: 1rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--bronze);
+      margin-bottom: 2.5rem;
+    }
+    
+    .hero-slogan {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.75rem;
+      color: var(--bronze);
+      margin-bottom: 3.5rem;
+      animation: slideUp 0.8s ease-out;
+      animation-delay: 0.2s;
+      animation-fill-mode: both;
+    }
+    
+    /* Division Cards */
+    .divisions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      max-width: 900px;
+      margin: 0 auto 3rem;
+      animation: slideUp 0.8s ease-out;
+      animation-delay: 0.4s;
+      animation-fill-mode: both;
+    }
+    
+    @media (max-width: 768px) {
+      .divisions {
+        grid-template-columns: 1fr;
+      }
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+    
+    .division-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      text-align: center;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.4s;
+    }
+    
+    .division-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.12);
+    }
+    
+    .division-card.commercial:hover {
+      border-color: var(--navy);
+    }
+    
+    .division-card.private:hover {
+      border-color: var(--bronze);
+    }
+    
+    .division-icon {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .division-title {
+      font-size: 1.75rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .division-title.commercial {
+      color: var(--navy);
+    }
+    
+    .division-title.private {
+      color: var(--bronze);
+    }
+    
+    .division-desc {
+      color: var(--graphite);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    
+    .division-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      transition: gap 0.3s;
+    }
+    
+    .division-link.commercial {
+      color: var(--navy);
+    }
+    
+    .division-link.private {
+      color: var(--bronze);
+    }
+    
+    .division-card:hover .division-link {
+      gap: 1rem;
+    }
+    
+    /* CTA Button */
+    .hero-cta {
+      animation: slideUp 0.8s ease-out;
+      animation-delay: 0.6s;
+      animation-fill-mode: both;
+    }
+    
+    .btn-primary {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: var(--navy);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 500;
+      letter-spacing: 0.025em;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 10px 30px rgba(30, 58, 95, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 40px rgba(30, 58, 95, 0.4);
+    }
+    
+    /* Scroll Indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .scroll-indicator span {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--silver);
+    }
+    
+    .scroll-indicator-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+    }
+    
+    /* Sections */
+    .section {
+      padding: 6rem 1.5rem;
+    }
+    
+    .section-pearl {
+      background: var(--pearl);
+    }
+    
+    .section-white {
+      background: white;
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+    
+    .section-line {
+      width: 4px;
+      height: 48px;
+      border-radius: 4px;
+      margin: 0 auto 1rem;
+    }
+    
+    .section-line.navy { background: var(--navy); }
+    .section-line.bronze { background: var(--bronze); }
+    .section-line.gold { background: var(--gold); }
+    
+    .section-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    
+    .section-label.navy { color: var(--navy); }
+    .section-label.bronze { color: var(--bronze); }
+    .section-label.gold { color: var(--gold); }
+    
+    .section-title {
+      font-size: 2.5rem;
+      color: var(--charcoal);
+    }
+    
+    /* Services Grid */
+    .services-grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    
+    @media (max-width: 1024px) {
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .service-card {
+      background: white;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.4s;
+    }
+    
+    .service-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.12);
+    }
+    
+    .service-card.navy {
+      border-top: 4px solid var(--navy);
+    }
+    
+    .service-card.bronze {
+      background: var(--pearl);
+      border-bottom: 4px solid var(--bronze);
+    }
+    
+    .service-icon {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    
+    .service-title {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .service-title.navy { color: var(--navy); }
+    .service-title.bronze { color: var(--bronze); }
+    
+    .service-list {
+      list-style: none;
+      text-align: left;
+    }
+    
+    .service-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--graphite);
+      margin-bottom: 0.5rem;
+    }
+    
+    .service-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+    
+    .service-dot.gold { background: var(--gold); }
+    .service-dot.copper { background: var(--copper); }
+    
+    /* Section CTA */
+    .section-cta {
+      text-align: center;
+      margin-top: 3rem;
+    }
+    
+    .btn-outline {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      border: 2px solid;
+      border-radius: 50px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    
+    .btn-outline.navy {
+      border-color: var(--navy);
+      color: var(--navy);
+    }
+    
+    .btn-outline.navy:hover {
+      background: var(--navy);
+      color: white;
+    }
+    
+    .btn-outline.bronze {
+      border-color: var(--bronze);
+      color: var(--bronze);
+    }
+    
+    .btn-outline.bronze:hover {
+      background: var(--bronze);
+      color: white;
+    }
+    
+    /* Process */
+    .process-grid {
+      max-width: 1024px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+    
+    .process-step {
+      background: white;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      text-align: center;
+      width: 170px;
+      transition: all 0.4s;
+    }
+    
+    .process-step:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+    
+    .process-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.125rem;
+      margin: 0 auto 0.75rem;
+    }
+    
+    .process-title {
+      font-size: 1.125rem;
+      color: var(--charcoal);
+      margin-bottom: 0.25rem;
+    }
+    
+    .process-desc {
+      font-size: 0.75rem;
+      color: var(--graphite);
+    }
+    
+    /* Stats */
+    .stats-grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    
+    @media (max-width: 1024px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+    }
+    
+    .stats-content h2 {
+      font-size: 2.5rem;
+      color: var(--charcoal);
+      margin-bottom: 2rem;
+    }
+    
+    .stats-content h2 span {
+      color: var(--bronze);
+    }
+    
+    .stats-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .stats-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    
+    .stats-check {
+      width: 40px;
+      height: 40px;
+      background: var(--navy);
+      color: white;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .stats-item h4 {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 600;
+      color: var(--charcoal);
+      margin-bottom: 0.25rem;
+    }
+    
+    .stats-item p {
+      font-size: 0.875rem;
+      color: var(--graphite);
+    }
+    
+    .stats-box {
+      background: var(--pearl);
+      border-radius: 1rem;
+      padding: 2.5rem;
+      text-align: center;
+    }
+    
+    .stats-numbers {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      color: var(--navy);
+      margin-bottom: 0.25rem;
+    }
+    
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--graphite);
+    }
+    
+    .stats-partner {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(156, 163, 175, 0.3);
+    }
+    
+    .stats-partner p {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--graphite);
+      margin-bottom: 0.25rem;
+    }
+    
+    .stats-partner a {
+      color: var(--bronze);
+      font-weight: 500;
+      text-decoration: none;
+    }
+    
+    .stats-partner a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Testimonials */
+    .testimonials {
+      max-width: 768px;
+      margin: 0 auto;
+    }
+    
+    .testimonial-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 2.5rem;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+    
+    .testimonial-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      color: rgba(201, 169, 98, 0.3);
+      margin-bottom: 1rem;
+    }
+    
+    .testimonial-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-style: italic;
+      line-height: 1.6;
+      color: var(--charcoal);
+      margin-bottom: 1.5rem;
+    }
+    
+    .testimonial-author {
+      font-weight: 600;
+      color: var(--navy);
+    }
+    
+    .testimonial-role {
+      font-size: 0.875rem;
+      color: var(--graphite);
+    }
+    
+    /* About */
+    .about-grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    
+    @media (max-width: 1024px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .about-content h2 {
+      font-size: 2.5rem;
+      color: var(--charcoal);
+      margin-bottom: 0.5rem;
+    }
+    
+    .about-role {
+      color: var(--bronze);
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+    
+    .about-text {
+      color: var(--graphite);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+    
+    .about-text strong {
+      color: var(--charcoal);
+      font-weight: 600;
+    }
+    
+    .about-partner {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(156, 163, 175, 0.3);
+    }
+    
+    .about-partner p {
+      font-size: 0.875rem;
+      color: var(--graphite);
+      margin-bottom: 0.5rem;
+    }
+    
+    .about-partner a {
+      color: var(--bronze);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    
+    .about-photo {
+      background: var(--pearl);
+      border-radius: 1rem;
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .about-photo-inner {
+      text-align: center;
+      width: 100%;
+    }
+    
+    .about-image {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      border-radius: 0.75rem;
+      object-fit: cover;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+    
+    /* Contact */
+    .contact-grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+    
+    @media (max-width: 1024px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .contact-info h2 {
+      font-size: 2.5rem;
+      color: var(--charcoal);
+      margin-bottom: 1.5rem;
+    }
+    
+    .contact-info h2 span {
+      color: var(--bronze);
+    }
+    
+    .contact-desc {
+      color: var(--graphite);
+      margin-bottom: 2.5rem;
+    }
+    
+    .contact-items {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .contact-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      transition: transform 0.3s;
+    }
+    
+    .contact-item:hover .contact-icon {
+      transform: scale(1.1);
+    }
+    
+    .contact-icon.navy { background: var(--navy); }
+    .contact-icon.bronze { background: var(--bronze); }
+    .contact-icon.gold { background: var(--gold); }
+    
+    .contact-item p:first-of-type {
+      font-size: 0.875rem;
+      color: var(--graphite);
+    }
+    
+    .contact-item p:last-of-type {
+      font-weight: 600;
+      color: var(--charcoal);
+    }
+    
+    /* Form */
+    .contact-form {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+    
+    .contact-form h3 {
+      font-size: 1.5rem;
+      text-align: center;
+      color: var(--charcoal);
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    @media (max-width: 640px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 0.875rem 1.125rem;
+      border: 2px solid #E8E4DF;
+      border-radius: 0.5rem;
+      font-family: 'Raleway', sans-serif;
+      font-size: 1rem;
+      color: var(--charcoal);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--navy);
+      box-shadow: 0 0 0 4px rgba(30, 58, 95, 0.1);
+    }
+    
+    input::placeholder, textarea::placeholder {
+      color: #999;
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .btn-submit {
+      width: 100%;
+      padding: 1rem;
+      background: var(--navy);
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      font-family: 'Raleway', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
+    
+    .btn-submit:hover {
+      opacity: 0.9;
+    }
+    
+    /* Footer */
+    .footer {
+      padding: 3rem 1.5rem;
+      border-top: 1px solid rgba(156, 163, 175, 0.2);
+      background: var(--ivory);
+    }
+    
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .footer-brand p {
+      font-size: 0.875rem;
+      color: var(--graphite);
+      max-width: 280px;
+      margin-top: 1rem;
+    }
+    
+    .footer h4 {
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--navy);
+      margin-bottom: 1rem;
+    }
+    
+    .footer ul {
+      list-style: none;
+    }
+    
+    .footer li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .footer a {
+      font-size: 0.875rem;
+      color: var(--graphite);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .footer a:hover {
+      color: var(--charcoal);
+    }
+    
+    .footer-bottom {
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(156, 163, 175, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .footer-bottom p {
+      font-size: 0.75rem;
+      color: var(--graphite);
+    }
+    
+    .footer-bottom a {
+      color: var(--bronze);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <div class="logo" onclick="scrollToSection('home')">
+        <div class="logo-shape">
+          <div class="logo-shape-outer"></div>
+          <div class="logo-shape-inner"></div>
+        </div>
+        <div class="logo-text">
+          <span style="color: var(--charcoal)">SPACE</span>
+          <span style="color: var(--bronze)">CREATORS</span>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="#home">Start</a>
+        <a href="#commercial">Komercyjne</a>
+        <a href="#private">Prywatne</a>
+        <a href="#process">Proces</a>
+        <a href="#about">O nas</a>
+        <a href="#contact" class="nav-cta">Kontakt</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="hero-bg">
+      <div class="hero-shape hero-shape-1"></div>
+      <div class="hero-shape hero-shape-2"></div>
+      <div class="hero-shape hero-shape-3"></div>
+    </div>
+    
+    <div class="hero-content">
+      <div class="hero-logo">
+        <div class="hero-logo-shape">
+          <div class="hero-logo-outer"></div>
+          <div class="hero-logo-mid"></div>
+          <div class="hero-logo-inner"></div>
+        </div>
+        <h1 class="hero-title heading">SPACE CREATORS</h1>
+        <p class="hero-subtitle">Projekt • Nadzór • Realizacja</p>
+      </div>
+      
+      <h2 class="hero-slogan">Kompleksowa obsługa Twoich inwestycji</h2>
+      
+      <div class="divisions">
+        <!-- Commercial -->
+        <div class="division-card commercial" onclick="scrollToSection('commercial')">
+          <div class="division-icon">
+            <svg width="100" height="100" viewBox="0 0 120 120" fill="none">
+              <path d="M20 100V35L60 15L100 35V100" stroke="#1E3A5F" stroke-width="2" fill="#1E3A5F08"/>
+              <path d="M60 15L20 35" stroke="#1E3A5F" stroke-width="2.5"/>
+              <path d="M60 15L100 35" stroke="#1E3A5F" stroke-width="2.5"/>
+              <rect x="30" y="42" width="14" height="12" rx="1" fill="white" stroke="#4A6680" stroke-width="1.5"/>
+              <rect x="53" y="42" width="14" height="12" rx="1" fill="white" stroke="#4A6680" stroke-width="1.5"/>
+              <rect x="76" y="42" width="14" height="12" rx="1" fill="white" stroke="#4A6680" stroke-width="1.5"/>
+              <rect x="30" y="60" width="14" height="12" rx="1" fill="white" stroke="#4A6680" stroke-width="1.5"/>
+              <rect x="53" y="60" width="14" height="12" rx="1" fill="white" stroke="#4A6680" stroke-width="1.5"/>
+              <rect x="76" y="60" width="14" height="12" rx="1" fill="white" stroke="#4A6680" stroke-width="1.5"/>
+              <rect x="48" y="78" width="24" height="22" rx="2" fill="#C9A96230" stroke="#1E3A5F" stroke-width="2"/>
+              <circle cx="68" cy="90" r="2" fill="#C9A962"/>
+              <ellipse cx="35" cy="108" rx="6" ry="2" fill="#1E3A5F20"/>
+              <circle cx="35" cy="98" r="4" fill="#1E3A5F40"/>
+              <ellipse cx="85" cy="108" rx="6" ry="2" fill="#1E3A5F20"/>
+              <circle cx="85" cy="98" r="4" fill="#1E3A5F40"/>
+              <circle cx="60" cy="22" r="4" fill="#C9A962" stroke="#1E3A5F" stroke-width="1"/>
+              <path d="M10 100H110" stroke="#1E3A5F" stroke-width="1" stroke-dasharray="4 4"/>
+            </svg>
+          </div>
+          <h3 class="division-title commercial heading">Lokale komercyjne</h3>
+          <p class="division-desc">Restauracje, salony, sklepy, biura, lokale sieciowe, gabinety. Pełna adaptacja przestrzeni handlowych i usługowych.</p>
+          <div class="division-link commercial">
+            <span>Zakres usług</span>
+            <span>→</span>
+          </div>
+        </div>
+        
+        <!-- Private -->
+        <div class="division-card private" onclick="scrollToSection('private')">
+          <div class="division-icon">
+            <svg width="100" height="100" viewBox="0 0 120 120" fill="none">
+              <path d="M60 12L105 45V105H15V45L60 12Z" stroke="#8B7355" stroke-width="2" fill="#8B735508"/>
+              <path d="M60 12L15 45" stroke="#5D4037" stroke-width="3"/>
+              <path d="M60 12L105 45" stroke="#5D4037" stroke-width="3"/>
+              <rect x="78" y="20" width="12" height="20" fill="#8B735520" stroke="#8B7355" stroke-width="1.5"/>
+              <path d="M81 18Q84 12 87 18" stroke="#B8733360" stroke-width="2" fill="none"/>
+              <path d="M45 105V70C45 62 52 58 60 58C68 58 75 62 75 70V105" fill="#B8733320" stroke="#5D4037" stroke-width="2"/>
+              <circle cx="70" cy="85" r="2.5" fill="#C9A962"/>
+              <rect x="22" y="55" width="16" height="18" rx="1" fill="white" stroke="#8B7355" stroke-width="1.5"/>
+              <line x1="30" y1="55" x2="30" y2="73" stroke="#8B7355" stroke-width="1"/>
+              <line x1="22" y1="64" x2="38" y2="64" stroke="#8B7355" stroke-width="1"/>
+              <rect x="82" y="55" width="16" height="18" rx="1" fill="white" stroke="#8B7355" stroke-width="1.5"/>
+              <line x1="90" y1="55" x2="90" y2="73" stroke="#8B7355" stroke-width="1"/>
+              <line x1="82" y1="64" x2="98" y2="64" stroke="#8B7355" stroke-width="1"/>
+              <ellipse cx="20" cy="105" rx="12" ry="4" fill="#7D847140"/>
+              <ellipse cx="100" cy="105" rx="12" ry="4" fill="#7D847140"/>
+              <circle cx="20" cy="98" r="6" fill="#7D847150"/>
+              <circle cx="100" cy="98" r="6" fill="#7D847150"/>
+              <ellipse cx="30" cy="64" rx="10" ry="6" fill="#C9A96215"/>
+              <ellipse cx="90" cy="64" rx="10" ry="6" fill="#C9A96215"/>
+              <path d="M60 78L56 74C54 72 54 69 56 68C58 67 60 68 60 70C60 68 62 67 64 68C66 69 66 72 64 74L60 78Z" fill="#C9A96260"/>
+            </svg>
+          </div>
+          <h3 class="division-title private heading">Przestrzenie prywatne</h3>
+          <p class="division-desc">Domy, apartamenty, rezydencje. Wykończenie wnętrz w standardzie premium z indywidualnym podejściem.</p>
+          <div class="division-link private">
+            <span>Zakres usług</span>
+            <span>→</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="hero-cta">
+        <a href="#contact" class="btn-primary">Bezpłatna konsultacja</a>
+      </div>
+    </div>
+    
+    <div class="scroll-indicator">
+      <span>Przewiń</span>
+      <div class="scroll-indicator-line"></div>
+    </div>
+  </section>
+
+  <!-- Commercial Section -->
+  <section class="section section-pearl" id="commercial">
+    <div class="section-header">
+      <div class="section-line navy"></div>
+      <p class="section-label navy">Pełen zakres usług</p>
+      <h2 class="section-title heading">Lokale komercyjne</h2>
+    </div>
+    
+    <div class="services-grid">
+      <div class="service-card navy card-hover">
+        <div class="service-icon">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <circle cx="32" cy="38" r="18" stroke="#1E3A5F" stroke-width="1.5" fill="#1E3A5F05"/>
+            <ellipse cx="32" cy="38" rx="13" ry="5" stroke="#4A6680" stroke-width="1" fill="#1E3A5F08"/>
+            <path d="M20 14V28M20 14C20 14 17 16 17 19C17 22 20 22 20 22" stroke="#1E3A5F" stroke-width="2" stroke-linecap="round"/>
+            <path d="M26 10V24M26 24V28M23 10V16H29V10" stroke="#1E3A5F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="44" cy="16" r="5" stroke="#C9A962" stroke-width="1.5" fill="#C9A96220"/>
+            <path d="M44 21V28" stroke="#C9A962" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h4 class="service-title navy heading">Restauracje i gastronomia</h4>
+        <ul class="service-list">
+          <li><span class="service-dot gold"></span>Projekt funkcjonalny kuchni i sali</li>
+          <li><span class="service-dot gold"></span>Dobór technologii gastronomicznej</li>
+          <li><span class="service-dot gold"></span>Wentylacja i klimatyzacja</li>
+          <li><span class="service-dot gold"></span>Uzgodnienia SANEPID</li>
+        </ul>
+      </div>
+      
+      <div class="service-card navy card-hover">
+        <div class="service-icon">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <ellipse cx="32" cy="18" rx="10" ry="14" stroke="#1E3A5F" stroke-width="1.5" fill="#1E3A5F05"/>
+            <path d="M22 18C22 18 25 24 32 24C39 24 42 18 42 18" stroke="#4A6680" stroke-width="1"/>
+            <rect x="27" y="34" width="10" height="22" rx="3" stroke="#1E3A5F" stroke-width="1.5" fill="#4A668010"/>
+            <path d="M12 48L22 38" stroke="#C9A962" stroke-width="2" stroke-linecap="round"/>
+            <path d="M52 48L42 38" stroke="#C9A962" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="12" cy="52" r="4" stroke="#C9A962" stroke-width="1.5" fill="#C9A96220"/>
+            <circle cx="52" cy="52" r="4" stroke="#C9A962" stroke-width="1.5" fill="#C9A96220"/>
+          </svg>
+        </div>
+        <h4 class="service-title navy heading">Salony beauty i fryzjerskie</h4>
+        <ul class="service-list">
+          <li><span class="service-dot gold"></span>Ergonomia stanowisk</li>
+          <li><span class="service-dot gold"></span>Oświetlenie zadaniowe</li>
+          <li><span class="service-dot gold"></span>Instalacje specjalistyczne</li>
+          <li><span class="service-dot gold"></span>Strefa klienta i recepcja</li>
+        </ul>
+      </div>
+      
+      <div class="service-card navy card-hover">
+        <div class="service-icon">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <rect x="8" y="18" width="48" height="38" rx="2" stroke="#1E3A5F" stroke-width="1.5" fill="#1E3A5F05"/>
+            <path d="M8 28H56" stroke="#4A6680" stroke-width="1"/>
+            <rect x="14" y="34" width="14" height="18" rx="1" stroke="#4A6680" stroke-width="1.5" fill="white"/>
+            <rect x="36" y="34" width="14" height="8" rx="1" stroke="#4A6680" stroke-width="1.5" fill="white"/>
+            <rect x="36" y="46" width="14" height="6" rx="1" stroke="#C9A962" stroke-width="1.5" fill="#C9A96220"/>
+            <path d="M20 10L32 18L44 10" stroke="#1E3A5F" stroke-width="1.5" fill="#1E3A5F08"/>
+            <circle cx="32" cy="23" r="3" fill="#C9A962"/>
+          </svg>
+        </div>
+        <h4 class="service-title navy heading">Sklepy i showroomy</h4>
+        <ul class="service-list">
+          <li><span class="service-dot gold"></span>Layout sprzedażowy</li>
+          <li><span class="service-dot gold"></span>Systemy ekspozycyjne</li>
+          <li><span class="service-dot gold"></span>Oświetlenie produktowe</li>
+          <li><span class="service-dot gold"></span>Zaplecze magazynowe</li>
+        </ul>
+      </div>
+      
+      <div class="service-card navy card-hover">
+        <div class="service-icon">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <rect x="8" y="12" width="48" height="44" rx="2" stroke="#1E3A5F" stroke-width="1.5" fill="#1E3A5F05"/>
+            <rect x="16" y="20" width="12" height="8" rx="1" stroke="#4A6680" stroke-width="1" fill="white"/>
+            <rect x="36" y="20" width="12" height="8" rx="1" stroke="#4A6680" stroke-width="1" fill="white"/>
+            <rect x="16" y="34" width="12" height="8" rx="1" stroke="#4A6680" stroke-width="1" fill="white"/>
+            <rect x="36" y="34" width="12" height="8" rx="1" stroke="#4A6680" stroke-width="1" fill="white"/>
+            <rect x="24" y="48" width="16" height="8" rx="1" stroke="#1E3A5F" stroke-width="1.5" fill="#C9A96220"/>
+            <path d="M32 12V4M26 4H38" stroke="#C9A962" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h4 class="service-title navy heading">Biura i przestrzenie pracy</h4>
+        <ul class="service-list">
+          <li><span class="service-dot gold"></span>Open space i gabinety</li>
+          <li><span class="service-dot gold"></span>Sale konferencyjne</li>
+          <li><span class="service-dot gold"></span>Strefy relaksu</li>
+          <li><span class="service-dot gold"></span>Rozwiązania akustyczne</li>
+        </ul>
+      </div>
+      
+      <div class="service-card navy card-hover">
+        <div class="service-icon">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <rect x="4" y="26" width="16" height="24" rx="1" stroke="#1E3A5F" stroke-width="1.5" fill="#1E3A5F05"/>
+            <rect x="24" y="20" width="16" height="30" rx="1" stroke="#1E3A5F" stroke-width="1.5" fill="#1E3A5F10"/>
+            <rect x="44" y="26" width="16" height="24" rx="1" stroke="#1E3A5F" stroke-width="1.5" fill="#1E3A5F05"/>
+            <path d="M12 12L32 6L52 12" stroke="#C9A962" stroke-width="2"/>
+            <circle cx="12" cy="12" r="3" fill="#C9A962"/>
+            <circle cx="32" cy="6" r="3" fill="#C9A962"/>
+            <circle cx="52" cy="12" r="3" fill="#C9A962"/>
+          </svg>
+        </div>
+        <h4 class="service-title navy heading">Lokale sieciowe</h4>
+        <ul class="service-list">
+          <li><span class="service-dot gold"></span>Standaryzacja fit-out</li>
+          <li><span class="service-dot gold"></span>Powtarzalność projektu</li>
+          <li><span class="service-dot gold"></span>Optymalizacja kosztów</li>
+          <li><span class="service-dot gold"></span>Multi-lokalizacje</li>
+        </ul>
+      </div>
+      
+      <div class="service-card navy card-hover">
+        <div class="service-icon">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <rect x="12" y="18" width="40" height="38" rx="2" stroke="#1E3A5F" stroke-width="1.5" fill="#1E3A5F05"/>
+            <path d="M32 26V42M24 34H40" stroke="#1E3A5F" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="32" cy="10" r="6" stroke="#C9A962" stroke-width="1.5" fill="#C9A96220"/>
+            <rect x="18" y="48" width="10" height="8" rx="1" stroke="#4A6680" stroke-width="1" fill="white"/>
+            <rect x="36" y="48" width="10" height="8" rx="1" stroke="#4A6680" stroke-width="1" fill="white"/>
+          </svg>
+        </div>
+        <h4 class="service-title navy heading">Gabinety i kliniki</h4>
+        <ul class="service-list">
+          <li><span class="service-dot gold"></span>Wymogi sanitarne</li>
+          <li><span class="service-dot gold"></span>Strefy sterylne</li>
+          <li><span class="service-dot gold"></span>Instalacje medyczne</li>
+          <li><span class="service-dot gold"></span>Ergonomia medyczna</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="section-cta">
+      <a href="#contact" class="btn-outline navy">Zapytaj o wycenę</a>
+    </div>
+  </section>
+
+  <!-- Private Section -->
+  <section class="section section-white" id="private">
+    <div class="section-header">
+      <div class="section-line bronze"></div>
+      <p class="section-label bronze">Pełen zakres usług</p>
+      <h2 class="section-title heading">Przestrzenie prywatne</h2>
+    </div>
+    
+    <div class="services-grid" style="grid-template-columns: repeat(4, 1fr);">
+      <div class="service-card bronze card-hover">
+        <div class="service-icon">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <path d="M32 6L58 28V58H6V28L32 6Z" stroke="#8B7355" stroke-width="1.5" fill="#8B735505"/>
+            <path d="M32 6L6 28" stroke="#5D4037" stroke-width="2.5"/>
+            <path d="M32 6L58 28" stroke="#5D4037" stroke-width="2.5"/>
+            <rect x="24" y="38" width="16" height="20" rx="1" stroke="#5D4037" stroke-width="1.5" fill="#B8733315"/>
+            <circle cx="37" cy="49" r="2" fill="#C9A962"/>
+            <rect x="10" y="32" width="10" height="12" rx="1" stroke="#8B7355" stroke-width="1" fill="white"/>
+            <rect x="44" y="32" width="10" height="12" rx="1" stroke="#8B7355" stroke-width="1" fill="white"/>
+          </svg>
+        </div>
+        <h4 class="service-title bronze heading">Domy jednorodzinne</h4>
+        <ul class="service-list">
+          <li><span class="service-dot copper"></span>Kompletny projekt wnętrz</li>
+          <li><span class="service-dot copper"></span>Nadzór budowlany</li>
+          <li><span class="service-dot copper"></span>Wykończenie pod klucz</li>
+          <li><span class="service-dot copper"></span>Koordynacja ogrodów</li>
+        </ul>
+      </div>
+      
+      <div class="service-card bronze card-hover">
+        <div class="service-icon">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <rect x="10" y="8" width="44" height="50" rx="2" stroke="#8B7355" stroke-width="1.5" fill="#8B735505"/>
+            <rect x="18" y="16" width="8" height="8" rx="1" stroke="#B87333" stroke-width="1" fill="white"/>
+            <rect x="38" y="16" width="8" height="8" rx="1" stroke="#B87333" stroke-width="1" fill="white"/>
+            <rect x="18" y="30" width="8" height="8" rx="1" stroke="#B87333" stroke-width="1" fill="white"/>
+            <rect x="38" y="30" width="8" height="8" rx="1" stroke="#B87333" stroke-width="1" fill="white"/>
+            <rect x="26" y="44" width="12" height="14" rx="1" stroke="#5D4037" stroke-width="1.5" fill="#C9A96220"/>
+            <circle cx="35" cy="52" r="1.5" fill="#C9A962"/>
+            <path d="M4 58H60" stroke="#8B7355" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <h4 class="service-title bronze heading">Apartamenty</h4>
+        <ul class="service-list">
+          <li><span class="service-dot copper"></span>Od stanu deweloperskiego</li>
+          <li><span class="service-dot copper"></span>Zabudowy na wymiar</li>
+          <li><span class="service-dot copper"></span>Smart home</li>
+          <li><span class="service-dot copper"></span>Oświetlenie scenograficzne</li>
+        </ul>
+      </div>
+      
+      <div class="service-card bronze card-hover">
+        <div class="service-icon">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <path d="M32 4L60 24V58H4V24L32 4Z" stroke="#8B7355" stroke-width="1.5" fill="#8B735508"/>
+            <path d="M32 4L4 24" stroke="#5D4037" stroke-width="2.5"/>
+            <path d="M32 4L60 24" stroke="#5D4037" stroke-width="2.5"/>
+            <path d="M24 58V40C24 36 27 34 32 34C37 34 40 36 40 40V58" fill="#B8733315" stroke="#5D4037" stroke-width="1.5"/>
+            <circle cx="37" cy="48" r="2" fill="#C9A962"/>
+            <rect x="8" y="28" width="12" height="14" rx="1" stroke="#8B7355" stroke-width="1" fill="white"/>
+            <rect x="44" y="28" width="12" height="14" rx="1" stroke="#8B7355" stroke-width="1" fill="white"/>
+            <circle cx="32" cy="12" r="3" fill="#C9A962"/>
+          </svg>
+        </div>
+        <h4 class="service-title bronze heading">Rezydencje premium</h4>
+        <ul class="service-list">
+          <li><span class="service-dot copper"></span>Materiały luksusowe</li>
+          <li><span class="service-dot copper"></span>Detale na zamówienie</li>
+          <li><span class="service-dot copper"></span>Koordynacja rzemieślników</li>
+          <li><span class="service-dot copper"></span>White glove service</li>
+        </ul>
+      </div>
+      
+      <div class="service-card bronze card-hover">
+        <div class="service-icon">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <path d="M32 14L54 32V56H10V32L32 14Z" stroke="#8B7355" stroke-width="1.5" fill="#8B735505"/>
+            <path d="M32 14L10 32" stroke="#5D4037" stroke-width="2"/>
+            <path d="M32 14L54 32" stroke="#5D4037" stroke-width="2"/>
+            <rect x="26" y="40" width="12" height="16" rx="1" stroke="#5D4037" stroke-width="1.5" fill="#B8733315"/>
+            <circle cx="35" cy="49" r="1.5" fill="#C9A962"/>
+            <circle cx="52" cy="10" r="6" stroke="#C9A962" stroke-width="1.5" fill="#C9A96230"/>
+            <path d="M8 18L14 12L20 22" stroke="#7D8471" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <ellipse cx="14" cy="22" rx="8" ry="4" fill="#7D847140"/>
+            <path d="M4 56H60" stroke="#7D8471" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <h4 class="service-title bronze heading">Domy wakacyjne</h4>
+        <ul class="service-list">
+          <li><span class="service-dot copper"></span>Projekty rekreacyjne</li>
+          <li><span class="service-dot copper"></span>Materiały odporne</li>
+          <li><span class="service-dot copper"></span>Minimalna konserwacja</li>
+          <li><span class="service-dot copper"></span>Integracja z otoczeniem</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="section-cta">
+      <a href="#contact" class="btn-outline bronze">Umów konsultację</a>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="section section-pearl" id="process">
+    <div class="section-header">
+      <div class="section-line gold"></div>
+      <p class="section-label gold">Jak działamy</p>
+      <h2 class="section-title heading">Proces współpracy</h2>
+    </div>
+    
+    <div class="process-grid">
+      <div class="process-step card-hover">
+        <div class="process-num" style="background: #1E3A5F;">01</div>
+        <h4 class="process-title heading">Konsultacja</h4>
+        <p class="process-desc">Analiza potrzeb i wstępna wycena</p>
+      </div>
+      <div class="process-step card-hover">
+        <div class="process-num" style="background: #4A6680;">02</div>
+        <h4 class="process-title heading">Koncepcja</h4>
+        <p class="process-desc">Projekt i wizualizacje 3D</p>
+      </div>
+      <div class="process-step card-hover">
+        <div class="process-num" style="background: #8B7355;">03</div>
+        <h4 class="process-title heading">Dokumentacja</h4>
+        <p class="process-desc">Projekt wykonawczy i pozwolenia</p>
+      </div>
+      <div class="process-step card-hover">
+        <div class="process-num" style="background: #B87333;">04</div>
+        <h4 class="process-title heading">Realizacja</h4>
+        <p class="process-desc">Koordynacja i nadzór</p>
+      </div>
+      <div class="process-step card-hover">
+        <div class="process-num" style="background: #C9A962;">05</div>
+        <h4 class="process-title heading">Odbiór</h4>
+        <p class="process-desc">Kontrola jakości i gwarancja</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="section section-white">
+    <div class="stats-grid">
+      <div class="stats-content">
+        <div class="section-line navy" style="margin: 0 0 1rem;"></div>
+        <p class="section-label navy">Dlaczego my</p>
+        <h2 class="heading">Doświadczenie, które <span>procentuje</span></h2>
+        
+        <div class="stats-list">
+          <div class="stats-item">
+            <div class="stats-check">✓</div>
+            <div>
+              <h4>Transparentność</h4>
+              <p>Jasne kosztorysy, bez ukrytych opłat</p>
+            </div>
+          </div>
+          <div class="stats-item">
+            <div class="stats-check">✓</div>
+            <div>
+              <h4>Terminowość</h4>
+              <p>Realistyczne harmonogramy, które dotrzymujemy</p>
+            </div>
+          </div>
+          <div class="stats-item">
+            <div class="stats-check">✓</div>
+            <div>
+              <h4>Raportowanie</h4>
+              <p>Cotygodniowe raporty i dokumentacja fotograficzna</p>
+            </div>
+          </div>
+          <div class="stats-item">
+            <div class="stats-check">✓</div>
+            <div>
+              <h4>Gwarancja</h4>
+              <p>Pełna odpowiedzialność za wykonane prace</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stats-box">
+        <div class="stats-numbers">
+          <div>
+            <div class="stat-num">10</div>
+            <div class="stat-label">Lat doświadczenia</div>
+          </div>
+          <div>
+            <div class="stat-num">80+</div>
+            <div class="stat-label">Kompleksowych projektów</div>
+          </div>
+          <div>
+            <div class="stat-num">60+</div>
+            <div class="stat-label">Zadowolonych klientów</div>
+          </div>
+          <div>
+            <div class="stat-num">100%</div>
+            <div class="stat-label">Terminowości i zaangażowania</div>
+          </div>
+        </div>
+        <div class="stats-partner">
+          <p>Partner technologiczny</p>
+          <a href="https://kulinarisk.solutions" target="_blank">Kulinarisk Solutions →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section section-pearl">
+    <div class="section-header">
+      <div class="section-line gold"></div>
+      <p class="section-label gold">Referencje</p>
+      <h2 class="section-title heading">Co mówią klienci</h2>
+    </div>
+    
+    <div class="testimonials">
+      <div class="testimonial-card">
+        <div class="testimonial-quote">"</div>
+        <p class="testimonial-text">Profesjonalizm na każdym etapie. Znajomość branży pozwoliła zaoszczędzić czas i uniknąć błędów.</p>
+        <p class="testimonial-author">Tatiana F.</p>
+        <p class="testimonial-role">Właścicielka restauracji</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="section section-white" id="about">
+    <div class="about-grid">
+      <div class="about-content">
+        <div class="section-line bronze" style="margin: 0 0 1rem;"></div>
+        <p class="section-label bronze">O nas</p>
+        <h2 class="heading">Przemysław Śledziak</h2>
+        <p class="about-role">Założyciel Space Creators</p>
+        
+        <p class="about-text">Od ponad dekady związany z branżą wnętrzarską. Z wykształcenia inżynier, z pasji twórca przestrzeni komercyjnych i prywatnych.</p>
+        
+        <p class="about-text"><strong>Współpracujemy z najlepszymi biurami architektonicznymi</strong>, zrzeszając ekspertów z każdego sektora usług. Nasza sieć partnerów to starannie wyselekcjonowani specjaliści, którzy gwarantują najwyższą jakość na każdym etapie projektu.</p>
+        
+        <p class="about-text">Pracujemy z <strong>szeregiem firm podwykonawczych</strong> — od ekip budowlanych po podwykonawców branżowych. Każdy zespół jest selektywnie dobierany do konkretnej przestrzeni, z uwzględnieniem specyfiki lokalu i założonego budżetu.</p>
+        
+        <p class="about-text">Obsługujemy zarówno <strong>klientów indywidualnych</strong>, dopasowując się elastycznie do ich potrzeb, jak i <strong>duże podmioty instytucjonalne</strong> — fundusze inwestycyjne, deweloperów oraz spółki kapitałowe wymagające kompleksowej obsługi portfela nieruchomości.</p>
+        
+        <div class="about-partner">
+          <p>Partner technologiczny</p>
+          <a href="https://kulinarisk.solutions" target="_blank">Kulinarisk Solutions →</a>
+        </div>
+      </div>
+      
+      <div class="about-photo">
+        <div class="about-photo-inner">
+          <img src="przemyslaw-sledziak.jpg" alt="Przemysław Śledziak - Założyciel Space Creators" class="about-image">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="section section-pearl" id="contact">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="section-line navy" style="margin: 0 0 1rem;"></div>
+        <p class="section-label navy">Kontakt</p>
+        <h2 class="heading">Porozmawiajmy o <span>Twoim projekcie</span></h2>
+        <p class="contact-desc">Bezpłatna konsultacja wstępna. Odpowiadamy w ciągu 24 godzin.</p>
+        
+        <div class="contact-items">
+          <a href="tel:+48513967466" class="contact-item">
+            <div class="contact-icon navy">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            </div>
+            <div>
+              <p>Telefon</p>
+              <p>+48 513 967 466</p>
+            </div>
+          </a>
+          
+          <a href="/cdn-cgi/l/email-protection#aec5c1c0dacfc5daeedddecfcdcbcddccbcfdac1dcdd80dec2" class="contact-item">
+            <div class="contact-icon bronze">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <p>Email</p>
+              <p><span class="__cf_email__" data-cfemail="c4afabaab0a5afb084b7b4a5a7a1a7b6a1a5b0abb6b7eab4a8">[email&#160;protected]</span></p>
+            </div>
+          </a>
+          
+          <div class="contact-item">
+            <div class="contact-icon gold">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <p>Adres</p>
+              <p>ul. Feliksa Pancera 12 m.29<br>03-183 Warszawa</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="contact-form">
+        <h3 class="heading">Zapytaj o wycenę</h3>
+        <form>
+          <div class="form-row">
+            <input type="text" placeholder="Imię i nazwisko">
+            <input type="email" placeholder="Email">
+          </div>
+          <div class="form-group">
+            <input type="tel" placeholder="Telefon">
+          </div>
+          <div class="form-group">
+            <select>
+              <option>Lokal komercyjny</option>
+              <option>Przestrzeń prywatna</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <input type="text" placeholder="Metraż (m²)">
+            <select>
+              <option value="">Budżet</option>
+              <option>50k - 150k PLN</option>
+              <option>150k - 300k PLN</option>
+              <option>300k - 500k PLN</option>
+              <option>Powyżej 500k PLN</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <textarea placeholder="Opis projektu..."></textarea>
+          </div>
+          <button type="submit" class="btn-submit">Wyślij zapytanie →</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo">
+            <div class="logo-shape" style="width: 28px; height: 28px;">
+              <div class="logo-shape-outer"></div>
+              <div class="logo-shape-inner" style="inset: 5px;"></div>
+            </div>
+            <div class="logo-text" style="font-size: 1rem;">
+              <span style="color: var(--charcoal)">SPACE</span>
+              <span style="color: var(--bronze)">CREATORS</span>
+            </div>
+          </div>
+          <p>Kompleksowa obsługa Twoich inwestycji. Od koncepcji po klucz.</p>
+        </div>
+        
+        <div>
+          <h4>Usługi</h4>
+          <ul>
+            <li><a href="#commercial">Lokale komercyjne</a></li>
+            <li><a href="#private">Przestrzenie prywatne</a></li>
+            <li><a href="#process">Proces</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4>Kontakt</h4>
+          <ul>
+            <li><a href="tel:+48513967466">+48 513 967 466</a></li>
+            <li><a href="/cdn-cgi/l/email-protection#f49f9b9a80959f80b4878495979197869195809b8687da8498"><span class="__cf_email__" data-cfemail="c4afabaab0a5afb084b7b4a5a7a1a7b6a1a5b0abb6b7eab4a8">[email&#160;protected]</span></a></li>
+            <li>Warszawa</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>© 2025 Space Creators</p>
+        <p>Partner: <a href="https://kulinarisk.solutions" target="_blank">Kulinarisk Solutions</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Navigation scroll effect
+    window.addEventListener('scroll', function() {
+      const nav = document.getElementById('nav');
+      if (window.scrollY > 50) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+    
+    // Smooth scroll
+    function scrollToSection(id) {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+ 
