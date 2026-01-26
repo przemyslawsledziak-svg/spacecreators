@@ -1,0 +1,29 @@
+# robots.txt for spacecreators.pl
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://spacecreators.pl/sitemap.xml
+
+# LLM/AI information file
+# For AI assistants and language models
+# See: https://spacecreators.pl/llms.txt
+
+# Crawl-delay (optional, helps with server load)
+Crawl-delay: 1
+
+# Allow AI crawlers to index content
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Anthropic-AI
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
